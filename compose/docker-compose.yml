@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  web_dcm_ovs:
+    build: ./dcm_ovs
+    volumes:
+      - ../code/dcm_ovs:/code
+    ports: 
+      #- 80:8000
+      - 127.0.0.2:80:8000
+    #stdin_open: true
+    tty: true
+    working_dir: /code
+    command: python3 manage.py runserver 0.0.0.0:8000
+
+  web_ss:
+    build: ./ss
+    volumes:
+      - ../code/ss:/code
+      - ../config/ss:/config
+      - ../upload_volume:/upload
+    ports: 
+      - 127.0.0.3:80:80
+    #stdin_open: true
+    tty: true
+    working_dir: /code
+    command: bash /config/run_services.sh
+
+    # docker-compose run web_dcm_ovs django-admin startproject src
+    # docker-compose run web_ss django-admin startproject src

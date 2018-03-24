@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block head_title %}
+{{ title }} | {{ block.super }}
+{% endblock head_title %}
+
+
+{% block content %}
+<a href="{% url 'upload:upload' %}"> upload</a>
+
+{% endblock content %}
