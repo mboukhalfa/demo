@@ -22,5 +22,7 @@ urlpatterns = [
     url(r'^api/upload/', include('upload.api.urls',namespace='api-upload')),
     url(r'^', include('upload.urls',namespace='upload')),
     url(r'^admin/', admin.site.urls),
+    url('^accounts/', include('django.contrib.auth.urls')),
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
 ]

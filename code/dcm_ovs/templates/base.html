@@ -21,6 +21,13 @@
 </head>
 
 <body>
+
+	{% if user.is_authenticated %}
+		<p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+	{% else %}
+		<p>Welcome, new user. Please log in.</p>
+	{% endif %}
+	
 	{% block content %}{% endblock content %}
 
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> 

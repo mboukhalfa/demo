@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseBadRequest
+from django.contrib.auth.decorators import login_required
 
 # JASON RETURN
 from django.http import JsonResponse
@@ -14,6 +15,7 @@ def index(request):
 	}
 	return render(request, "upload/index.html", context)
 
+@login_required
 def upload(request):
 
 	if request.method == 'POST':
