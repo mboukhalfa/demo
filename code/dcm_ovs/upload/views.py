@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 
+
 # JASON RETURN
 from django.http import JsonResponse
 from django.core import serializers
@@ -26,9 +27,10 @@ def upload(request):
 			video_obj = Video.objects.create(name=videoname)
 			video_obj_id = video_obj.id
 			video_obj.save()
-			data_serialized = serializers.serialize("json", [video_obj])
-			return JsonResponse(data_serialized,safe=False)
+			# data_serialized = serializers.serialize("json", [video_obj.uuid])
+			return JsonResponse({'uuid':video_obj.uuid},safe=False)
 
+	# if not post show upload form 
 	context = {
 		"title":"Upload",
 	}

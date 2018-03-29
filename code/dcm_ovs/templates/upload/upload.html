@@ -91,25 +91,29 @@ $(document).ready(function(){
 		fd.append('key', keyPath + filename);
 		// fd.append('acl','private');
 		fd.append('Content-Type', contentType);
-		fd.append("token", data.key)
+		fd.append("uuid", data.uuid)
 		fd.append('filename', filename);
 		fd.append('file', fileItem);
 		return fd
 	}
+
     function uploadFile(fileItem){
         var data = {
-		url:'http://ss.dcm-ovs.com:8080/upload/',
+            // add to setting url to simplify editing
+		url:'http://ss.dcm-ovs.com/upload/',
         };
 
         $.ajax({
             type:"POST",
             data: { // TODO: send to server side file name and maybe md5 of file also type mime and size
                 filename: fileItem.name
-            }, // TODO: maybe i can use datatype
+            },
             url: "{% url 'upload:upload' %}",
             dataType : "json",
             success: function(revievedData){
-                    alert("success: "+jQuery.type(revievedData))
+                    alert("success: "+ revievedData.uuid)
+                    data.uuid = revievedData['uuid']+'4'
+                    // data.uuid = $.parseJSON(revievedData)[0].fields.uuid
             },
             error: function(data){
                 alert("An error occured, please try again later")

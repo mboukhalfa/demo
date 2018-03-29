@@ -1,0 +1,7 @@
+<form action="{% url 'upload:deleteOauthApp'%}" method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<p>Delete all Oauth app?</p>
+<input type="submit" value="Delete" />
+<a href="{%url 'upload:gettokens'%}"><button type="button">Cancel</button></a>
+</form>

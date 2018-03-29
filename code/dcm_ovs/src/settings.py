@@ -50,6 +50,11 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend'
     
 )
+OAUTH2_PROVIDER = {
+
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 120,
+}
+LOGIN_REDIRECT_URL = '/'
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',

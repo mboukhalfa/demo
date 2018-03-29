@@ -14,3 +14,4 @@ class UploadUUIDSerializer(serializers.ModelSerializer):
 			"uuid",
 
 		]
+		read_only_fields = ("pk","name","timestamp","uuid")
