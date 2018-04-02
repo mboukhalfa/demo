@@ -10,12 +10,14 @@ from upload.forms import OauthAppForm, DeleteOauthAppForm
 from shutil import  move
 from django.utils.timezone import utc
 from django.utils.dateparse import parse_datetime
+
 import datetime
 import requests
 import base64
 
 from upload.models import OauthApp
 
+from .validator.validator import VideoValidator
 '''
  SETTINGS
 	  '''
@@ -46,13 +48,27 @@ def upload(request):
 				#if valide time and not uploaded
 				json_data = response.json()
 				timediff = datetime.datetime.utcnow().replace(tzinfo=utc) - parse_datetime(json_data['timestamp'])
-				if not json_data['uploade'] and timediff.total_seconds() < UUID_EXPIRE_SECONDS :
-					# go validate video then move it
-					move (request.POST["file.path"],"/upload/"+request.POST["file.name"])
-					return HttpResponse("uploaded ")
+				if not json_data['uploaded'] and timediff.total_seconds() < UUID_EXPIRE_SECONDS :
+					# validate video 
+					v_v = VideoValidator(request.POST) 
+					if not v_v.is_valid ():
+						return HttpResponse("Unsupported Media Type",status=415)
+
+					# inform website that video uploaded
+					r = requests.put(WEB_SERVER_URL_ROOT + WEB_SERVER_URL_API_UPLOAD + uuid +'/',headers={'Authorization': 'Bearer '+ oauthAppObject.access_token}, data = {'uploaded':True})
+
+					if r:
+						# from mime type in VideoValidator we can find ext than rename file
+						move (request.POST["file.path"],"/upload/"+request.POST["file.name"])
+						return HttpResponse("uploaded ")
+
+					else:
+						return HttpResponse("unable confirm upload",status=504)
+
+					
 				else :
 
-					raise PermissionDenied
+					raise PermissionDenied # maybe we can inform that this uuid not valid
 			#  else maybe because of access token or UUID non valide  
 			else:
 				# if uuid not valide

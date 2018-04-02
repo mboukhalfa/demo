@@ -9,6 +9,6 @@ class Video(models.Model):
     file_type = models.CharField(max_length=120, null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True) # first add can used to calculate uuid validation
     updated   = models.DateTimeField(auto_now=True) # mise a jour
-    uploade   = models.BooleanField(default=False)
+    uploaded   = models.BooleanField(default=False)
     uuid      = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 

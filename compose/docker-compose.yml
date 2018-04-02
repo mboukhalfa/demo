@@ -6,8 +6,8 @@ services:
     volumes:
       - ../code/dcm_ovs:/code
     ports: 
-      # - 80:8000
-       - 127.0.0.2:80:8000
+      - 80:8000
+       # - 127.0.0.2:80:8000
     #stdin_open: true
     tty: true
     working_dir: /code
@@ -20,8 +20,8 @@ services:
       - ../config/ss:/config
       - ../upload_volume:/upload
     ports:
-      # - 8080:80 
-       - 127.0.0.3:80:80
+      - 8080:80 
+       # - 127.0.0.3:80:80
     #stdin_open: true
     tty: true
     working_dir: /code

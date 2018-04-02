@@ -10,7 +10,7 @@ class UploadUUIDSerializer(serializers.ModelSerializer):
 			"pk",
 			"name",
 			"timestamp",
-			"uploade",
+			"uploaded",
 			"uuid",
 
 		]

@@ -100,7 +100,7 @@ $(document).ready(function(){
     function uploadFile(fileItem){
         var data = {
             // add to setting url to simplify editing
-		url:'http://ss.dcm-ovs.com/upload/',
+		url:'http://ss.dcm-ovs.com:8080/upload/',
         };
 
         $.ajax({
@@ -112,7 +112,8 @@ $(document).ready(function(){
             dataType : "json",
             success: function(revievedData){
                     alert("success: "+ revievedData.uuid)
-                    data.uuid = revievedData['uuid']+'4'
+                    data.uuid = revievedData['uuid']
+                    // data.uuid = '4513f29b-ee91-4656-86de-70e8aca88959'
                     // data.uuid = $.parseJSON(revievedData)[0].fields.uuid
             },
             error: function(data){
