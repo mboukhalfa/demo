@@ -1,0 +1,22 @@
+{% extends "oauth2_provider/base.html" %}
+
+{% load i18n %}
+{% block content %}
+    <div class="container border">
+    <h3 class=" my-4 ml-2 font-weight-bold ">{% trans "Your applications" %}</h3>
+    <div class=" m-4">
+
+        {% if applications %}
+            <ul>
+                {% for application in applications %}
+                    <li><a href="{{ application.get_absolute_url }}">{{ application.name }}</a></li>
+                {% endfor %}
+            </ul>
+
+            <a class="btn btn-success" href="{% url "oauth2_provider:register" %}">New Application</a>
+        {% else %}
+            <p>{% trans "No applications defined" %}. <a href="{% url 'oauth2_provider:register' %}">{% trans "Click here" %}</a> {% trans "if you want to register a new one" %}</p>
+        {% endif %}
+    </div>
+    </div>
+{% endblock content %}

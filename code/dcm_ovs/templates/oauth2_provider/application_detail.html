@@ -1,0 +1,44 @@
+{% extends "oauth2_provider/base.html" %}
+
+{% load i18n %}
+{% block content %}
+    <div class="container border">
+    <h3 class=" my-4 ml-2 font-weight-bold ">{{ application.name }}</h3>
+    <div class=" m-4">
+       
+
+       
+            <div class="form-group">
+                <label for="client_id" class="font-weight-bold lead">{% trans "Client id" %}</label>
+                <input class="form-control" id="client_id" type="text" value="{{ application.client_id }}" readonly>
+            </div>
+     
+            <div class="form-group">
+                <label for="client_secret" class="font-weight-bold lead">{% trans "Client secret" %}</label>
+                <input class="form-control" id="client_secret" type="text" value="{{ application.client_secret }}" readonly>
+            </div>
+               
+            <div class="form-group">
+                <label for="client_type"  class="font-weight-bold lead">{% trans "Client type" %}</label>
+                <input class="form-control-plaintext" id="client_type" type="text" value="{{ application.client_type }}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="authorization_grant_type" class="font-weight-bold lead">{% trans "Authorization Grant Type" %}</label>
+                <input class="form-control-plaintext" id="authorization_grant_type" type="text" value="{{ application.authorization_grant_type }}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="redirect_uris" class="font-weight-bold lead">{% trans "Redirect Uris" %}</label>
+                <textarea class="form-control" id="redirect_uris" rows="3" readonly>{{ application.redirect_uris }}</textarea>
+            </div>
+
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a class="btn" href="{% url "oauth2_provider:list" %}">{% trans "Go Back" %}</a>
+                <a class="btn btn-primary" href="{% url "oauth2_provider:update" application.id %}">{% trans "Edit" %}</a>
+                <a class="btn btn-danger" href="{% url "oauth2_provider:delete" application.id %}">{% trans "Delete" %}</a>
+            </div>
+
+    </div>
+    </div>
+{% endblock content %}

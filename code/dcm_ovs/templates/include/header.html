@@ -1,0 +1,75 @@
+<nav class="navbar navbar-expand-lg navbar-light ">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSoQube" aria-controls="navbarSoQube" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSoQube">
+    <a class="navbar-brand" href="#">SoQube</a>
+
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+    
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+    <div class="dropdown show">
+      <li class="nav-item">
+        
+  <a class="nav-link dropdown-toggle" href="" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  OAuth
+  </a>
+
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <a class="dropdown-item" href="{% url 'oauth2_provider:list' %}">Applications</a>
+    <a class="dropdown-item" href="{% url 'oauth2_provider:authorized-token-list' %} ">Tokens</a>
+
+  </div>
+
+      </li>
+    </div>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">About</a>
+      </li>
+    
+    </ul>
+ {% if user.is_authenticated %}
+
+		  <img src="/static/account.png" alt="..." class=" mb-2 mh-2">  <!--<i class="material-icons align-top btn pb-4"  style="font-size:30px; color:blue;">perm_identity</i> --><p>Welcome, {{ user.username }}.
+			
+      		<a href="/accounts/logout/?next=/" class="btn btn-outline-primary" >Sign out</a>
+  		 </p>
+	{% else %}
+    <form class="form-inline " method="post" action="/accounts/login/">
+    	{% csrf_token %}
+
+    	<div class="input-group mr-sm-2 ">
+	        <div class="input-group-prepend">
+	          <div class="input-group-text">@</div>
+	        </div>
+	        <input type="text" name= "username" class="form-control" id="inlineFormInputGroup" placeholder="Username">
+      	</div>
+
+	    <input type="password" name= "password" class="form-control mr-sm-2" placeholder="Password">
+
+	    <div class="input-group ">
+      		<button type="submit" class="btn btn-outline-primary">Sign in</button>
+  		</div>
+    </form>
+   {% endif %}
+  </div>
+</nav>
+
+
+<div class="jumbotron">
+  <h1 class="display-4">SoQube</h1>
+  <p class="lead">This is a simple Demo, how to separate upload and storage.</p>
+  <hr class="my-4">
+  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+  <p class="lead">
+    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+  </p>
+</div>
+
+
+
+
+
+
