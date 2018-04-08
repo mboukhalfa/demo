@@ -98,16 +98,7 @@ $(document).ready(function () {
         fileItemListname.splice(inLoadingIndex, 1);
         $(this).closest('div').html("");
     });
-    // $(".close").click(function () {
-    //     alert("Handler for .click() called." + $(this));
-    // });
 
-    function uploadComplete(file) {
-        alert(file.order)
-        var itemList = $('.uploading-queue')
-
-
-    }
 
     function verifyVideo(file) {
         // verifies the file extension is one we support.
@@ -173,10 +164,7 @@ $(document).ready(function () {
         let fh = arafileHtml(obj);
         fh.html("");
         var item = obj.file
-        var id_ = obj.id
-        var order_ = obj.order
-        // <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">25%</div>
-        var close_html = ' <button type="button" class="close" aria-label="Close" data-id="' + id_ + '"> <span aria-hidden="true">&times;</span> </button>'
+
         var html_ = '<div class = "progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width:' + item.progress + '%" aria-valuenow="' + item.progress + '" aria-valuemin="0" aria-valuemax="100">' + item.progress + '%</div>'
         fh.html(html_)
 
@@ -185,7 +173,7 @@ $(document).ready(function () {
     function uploadFile(fileItem) {
         var data = {
             // add to setting url to simplify editing
-            url: 'http://ss.dcm-ovs.com:8080/upload/',
+            url: 'http://ss.dcm-ovs.com/upload/',
         };
 
         $.ajax({
@@ -195,92 +183,154 @@ $(document).ready(function () {
             },
             url: "/upload/",
             dataType: "json",
+
             success: function (revievedData) {
-                // alert("success: " + revievedData.uuid)
                 data.uuid = revievedData['uuid']
-                // data.uuid = '4513f29b-ee91-4656-86de-70e8aca88959'
-                // data.uuid = $.parseJSON(revievedData)[0].fields.uuid
             },
             error: function (data) {
-                alert("An error occured, please try again later")
+                alert("An error occurred, please try again")
             }
         }).done(function () {
+
+
+                let interval = null;
                 // construct the needed data
                 var fd = constructFormData(data, fileItem)
 
                 // use XML http Request to Send ss.
                 var xhr = new XMLHttpRequest()
 
-                // construct callback for when uploading starts
-                xhr.upload.onloadstart = function (event) {
-                    console.log("upoad start " + fileItemList);
 
-                    // Item is not loading, add to inProgress queue
-                    newLoadingItem = {
-                        file: fileItem,
-                        id: data.uuid,
-                        order: fileItemList.length + 1
-                    }
-
-                    fileItemList.push(newLoadingItem)
-                    displayItem(newLoadingItem)
-                    fileItem.xhr = xhr
+                /* generate random progress-id */
+                let progress_uuid = "";
+                for (i = 0; i < 32; i++) {
+                    progress_uuid += Math.floor(Math.random() * 16).toString(16);
                 }
+                /* patch the data include the progress-id */
+                data.url += "?X-Progress-ID=" + progress_uuid;
 
-                // Monitor upload progress and attach to fileItem.
-                xhr.upload.addEventListener("progress", function (event) {
-                    if (event.lengthComputable) {
-                        var progress = Math.round(event.loaded / event.total * 100);
-                        fileItem.progress = progress
-                        processDisplay(fileItem);
-                        console.log("progress = " + progress)
-                    }
-                })
-
-                function readBody(xhr) {
-                    var data;
-                    if (!xhr.responseType || xhr.responseType === "text") {
-                        data = xhr.responseText;
-
-                    } else if (xhr.responseType === "document") {
-                        data = xhr.responseXML;
-
-                    } else {
-                        data = xhr.response;
-
-                    }
-                    return data;
-                }
-
-
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4) {
-                        let item = arafile(fileItem);
-                        let itemhtml = arafileHtml(item);
-
-                        switch (xhr.status) {
-                            case 200:
-                                itemhtml.replaceWith('<div class="alert alert-success" role="alert">This video was successfully uploaded </div>')
-                                break;
-                            case 413:
-                                itemhtml.replaceWith('<div class="alert alert-danger" role="alert">Error, file too large ! </div>')
-                                break;
-                            case 415:
-                                itemhtml.replaceWith('<div class="alert alert-danger" role="alert">Error, Unsupported Media Type !</div>')
-                                break;
-                            default:
-                                itemhtml.replaceWith('<div class="alert alert-danger" role="alert">Error, file too large ! </div>')
-                                break;
-
-                        }
-                        console.log(readBody(xhr));
-                    }
-                }
-
-
+                console.log(data.url)
                 xhr.open('POST', data.url, true);
                 xhr.setRequestHeader('uuid', data.uuid);
                 xhr.send(fd);
+
+                /* call the progress-updater every 1000ms */
+                setTimeout(function () {
+                    fetch(progress_uuid);
+                }, 1000);
+
+
+                // Item is not loading, add to inProgress queue
+                newLoadingItem = {
+                    file: fileItem,
+                    id: data.uuid,
+                    order: fileItemList.length + 1
+                }
+
+                fileItemList.push(newLoadingItem)
+                displayItem(newLoadingItem)
+                fileItem.xhr = xhr
+
+
+                function fetch(progress_uuid) {
+                    let req = new XMLHttpRequest();
+                    req.open("GET", "http://ss.dcm-ovs.com/progress", true);
+                    req.setRequestHeader("X-Progress-ID", progress_uuid);
+                    req.onreadystatechange = function () {
+                        if (req.readyState == 4) {
+                            if (req.status == 200) {
+
+                                /* poor-man JSON parser */
+                                var upload = JSON.parse(req.responseText);
+
+
+                                if (upload.state == 'starting') {
+                                    console.log('starting')
+                                    fetch(progress_uuid);
+
+                                }
+                                /* change the width if the inner progress-bar*/
+                                if (upload.state == 'uploading') {
+
+
+                                    console.log('uplo')
+                                    w = Math.floor(100 * upload.received / upload.size);
+                                    fileItem.progress = w
+                                    if (w < 100) {
+                                        processDisplay(fileItem);
+                                        fetch(progress_uuid);
+                                    } else {
+                                        setTimeout(function () {
+                                            fetch(progress_uuid);
+                                        }, 500);
+                                    }
+                                    console.log("progress = " + w)
+                                }
+                                /* we are done, stop the interval */
+                                if (upload.state == 'done') {
+
+                                    fileItem.progress = 100
+                                    processDisplay(fileItem);
+                                    console.log("fffffffffffffff  ")
+                                    window.clearTimeout(interval);
+                                }
+                            }
+                        }
+                    }
+                    req.send(null);
+                }
+
+
+                //
+                // // Monitor upload progress and attach to fileItem.
+                // xhr.upload.addEventListener("progress", function (event) {
+                //     if (event.lengthComputable) {
+                //         var progress = Math.round(event.loaded / event.total * 100);
+                //
+                //     }
+                // })
+                //
+                // function readBody(xhr) {
+                //     var data;
+                //     if (!xhr.responseType || xhr.responseType === "text") {
+                //         data = xhr.responseText;
+                //
+                //     } else if (xhr.responseType === "document") {
+                //         data = xhr.responseXML;
+                //
+                //     } else {
+                //         data = xhr.response;
+                //
+                //     }
+                //     return data;
+                // }
+                //
+                //
+                // xhr.onreadystatechange = function () {
+                //     if (xhr.readyState === 4) {
+                //         let item = arafile(fileItem);
+                //         let itemhtml = arafileHtml(item);
+                //
+                //         switch (xhr.status) {
+                //             case 200:
+                //                 itemhtml.replaceWith('<div class="alert alert-success" role="alert">This video was successfully uploaded </div>')
+                //                 break;
+                //             case 413:
+                //                 itemhtml.replaceWith('<div class="alert alert-danger" role="alert">Error, file too large ! </div>')
+                //                 break;
+                //             case 415:
+                //                 itemhtml.replaceWith('<div class="alert alert-danger" role="alert">Error, Unsupported Media Type !</div>')
+                //                 break;
+                //             default:
+                //                 itemhtml.replaceWith('<div class="alert alert-danger" role="alert">Error, file too large ! </div>')
+                //                 break;
+                //
+                //         }
+                //         console.log(readBody(xhr));
+                //     }
+                // }
+
+
             }
         )
     }

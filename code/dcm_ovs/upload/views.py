@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 # JASON RETURN
@@ -8,10 +8,9 @@ from .models import Video
 
 
 def index(request):
-    context = {
-        "title": "Index",
-    }
-    return render(request, "upload/index.html", context)
+
+    return redirect('upload:upload')
+
 
 
 @login_required
