@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # my app
     'upload',
+    'oauth',
     'corsheaders',
 ]
 
@@ -130,5 +131,12 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-UPLOAD_VIDEO_EXT=[]
-UPLOAD_VIDEO_MIMETYPE=['video/mp4']
+
+'''
+ SETTINGS
+	  '''
+UUID_EXPIRE_SECONDS = 300
+WEB_SERVER_URL_ROOT = 'http://web_dcm_ovs:8000'
+WEB_SERVER_URL_API_UPLOAD = '/api/upload/'
+
+LOGIN_REDIRECT_URL = '/'

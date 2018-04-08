@@ -18,6 +18,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-	url(r'^', include('upload.urls',namespace='upload')),
+    url('^accounts/', include('django.contrib.auth.urls')),
+    url(r'^o/', include('oauth.urls', namespace='oauth')),
+    url(r'^upload/', include('upload.urls', namespace='upload')),
     url(r'^admin/', admin.site.urls),
 ]

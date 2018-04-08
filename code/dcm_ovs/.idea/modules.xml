@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/dcm_ovs.iml" filepath="$PROJECT_DIR$/.idea/dcm_ovs.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../ss/.idea/ss.iml" filepath="$PROJECT_DIR$/../ss/.idea/ss.iml" />
     </modules>
   </component>
 </project>

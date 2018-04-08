@@ -185,7 +185,7 @@ $(document).ready(function () {
     function uploadFile(fileItem) {
         var data = {
             // add to setting url to simplify editing
-            url: 'http://ss.dcm-ovs.com/upload/',
+            url: 'http://ss.dcm-ovs.com:8080/upload/',
         };
 
         $.ajax({
@@ -279,6 +279,7 @@ $(document).ready(function () {
 
 
                 xhr.open('POST', data.url, true);
+                xhr.setRequestHeader('uuid', data.uuid);
                 xhr.send(fd);
             }
         )

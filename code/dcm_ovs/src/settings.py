@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     # third party
     'rest_framework',
     'oauth2_provider',
-    'corsheaders',
     'widget_tweaks',
 ]
 AUTHENTICATION_BACKENDS = (
@@ -62,8 +61,6 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
 
-    #corsheaders middleware
-    'corsheaders.middleware.CorsMiddleware',
     'oauth2_provider.middleware.OAuth2TokenMiddleware',
     
     'django.middleware.common.CommonMiddleware',
@@ -74,10 +71,6 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 ]
-
-CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ALLOW_CREDENTIALS = True
-
 
 
 ROOT_URLCONF = 'src.urls'

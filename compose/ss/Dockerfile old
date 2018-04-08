@@ -1,6 +1,0 @@
-FROM django
-
-WORKDIR /code
-RUN mkdir ../config
-COPY requirements.txt ./
-RUN pip install -r requirements.txt

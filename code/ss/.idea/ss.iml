@@ -14,7 +14,7 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="python compose ss_dcm_ovs" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Remote Python 3.5.5 Docker Compose (web_dcm_ovs at [/Users/bmm/Desktop/work/compose/docker-compose.yml])" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TemplatesService">
