@@ -33,7 +33,7 @@
                 <textarea class="form-control" id="redirect_uris" rows="3" readonly>{{ application.redirect_uris }}</textarea>
             </div>
 
-            <div class="btn-group" role="group" aria-label="Basic example">
+            <div class="btn-toolbar" >
                 <a class="btn" href="{% url "oauth2_provider:list" %}">{% trans "Go Back" %}</a>
                 <a class="btn btn-primary" href="{% url "oauth2_provider:update" application.id %}">{% trans "Edit" %}</a>
                 <a class="btn btn-danger" href="{% url "oauth2_provider:delete" application.id %}">{% trans "Delete" %}</a>

@@ -44,7 +44,9 @@
                     <a href="/accounts/logout/?next=/" class="ml-2">Sign out</a>
                 </p>
             {% else %}
-                <a href="/accounts/login/">Sign in</a>
+                {% if not request.path == "/accounts/login/" %}
+                    <a href="/accounts/login/">Sign in</a>
+                {% endif %}
             {% endif %}
         </div>
     </nav>
@@ -53,8 +55,8 @@
     <div class="jumbotron">
         <h1 class="display-4">DCM-OVS</h1>
         <p>
-        <span class="lead">This is a simple Demo,</span>
-        Demonstrates using separate Secure Storage.</p>
+            <span class="lead">This is a simple Demo,</span>
+            Demonstrates using separate Secure Storage.</p>
     </div>
 
 </header>

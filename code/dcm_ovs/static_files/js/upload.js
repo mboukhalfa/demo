@@ -65,6 +65,7 @@ $(document).ready(function () {
     // end session cookie data setup.
 
     let fileItemList = []
+    let ordering = 0;
     let fileItemListname = []
 
     function process_selected(selectedFiles) {
@@ -92,10 +93,13 @@ $(document).ready(function () {
         var selectedFiles = $(this).prop('files');
         process_selected(selectedFiles)
     });
+
+
     $(document).on('click', '.close', function (event) {
 
         var inLoadingIndex = $.inArray($(this).clone().parent().children().remove().end().text(), fileItemListname)
         fileItemListname.splice(inLoadingIndex, 1);
+        fileItemList.splice(inLoadingIndex, 1);
         $(this).closest('div').html("");
     });
 
@@ -214,17 +218,14 @@ $(document).ready(function () {
                 xhr.setRequestHeader('uuid', data.uuid);
                 xhr.send(fd);
 
-                /* call the progress-updater every 1000ms */
-                setTimeout(function () {
-                    fetch(progress_uuid);
-                }, 1000);
-
 
                 // Item is not loading, add to inProgress queue
+
+
                 newLoadingItem = {
                     file: fileItem,
                     id: data.uuid,
-                    order: fileItemList.length + 1
+                    order: ++ordering,
                 }
 
                 fileItemList.push(newLoadingItem)
@@ -246,7 +247,11 @@ $(document).ready(function () {
 
                                 if (upload.state == 'starting') {
                                     console.log('starting')
-                                    fetch(progress_uuid);
+
+                                    setTimeout(function () {
+                                        fetch(progress_uuid);
+                                    }, 200);
+
 
                                 }
                                 /* change the width if the inner progress-bar*/
@@ -255,23 +260,51 @@ $(document).ready(function () {
 
                                     console.log('uplo')
                                     w = Math.floor(100 * upload.received / upload.size);
-                                    fileItem.progress = w
-                                    if (w < 100) {
+                                    if (w !== fileItem.progress && w < 100) {
+                                        fileItem.progress = w
                                         processDisplay(fileItem);
-                                        fetch(progress_uuid);
-                                    } else {
                                         setTimeout(function () {
                                             fetch(progress_uuid);
                                         }, 500);
+                                        console.log("progress = " + w)
+                                    } else {
+                                        setTimeout(function () {
+                                            fetch(progress_uuid);
+                                        }, 1000);
                                     }
-                                    console.log("progress = " + w)
                                 }
                                 /* we are done, stop the interval */
                                 if (upload.state == 'done') {
-
+                                    let item = arafile(fileItem);
+                                    let itemhtml = arafileHtml(item);
                                     fileItem.progress = 100
                                     processDisplay(fileItem);
-                                    console.log("fffffffffffffff  ")
+                                    itemhtml.replaceWith('<div class="alert alert-success" role="alert">This video was successfully uploaded </div>')
+
+                                    window.clearTimeout(interval);
+                                }
+                                /* we are done, stop the interval */
+                                if (upload.state == 'error') {
+                                    let item = arafile(fileItem);
+                                    let itemhtml = arafileHtml(item);
+
+
+                                    switch (upload.status) {
+                                        case 200:
+                                            itemhtml.replaceWith('<div class="alert alert-success" role="alert">This video was successfully uploaded </div>')
+                                            break;
+                                        case 413:
+                                            itemhtml.replaceWith('<div class="alert alert-danger" role="alert">Error, file too large ! </div>')
+                                            break;
+                                        case 415:
+                                            itemhtml.replaceWith('<div class="alert alert-danger" role="alert">Error, Unsupported Media Type !</div>')
+                                            break;
+                                        default:
+                                            itemhtml.replaceWith('<div class="alert alert-danger" role="alert">Error, file too large ! </div>')
+                                            break;
+
+                                    }
+                                    console.log("error  " + upload.status)
                                     window.clearTimeout(interval);
                                 }
                             }
@@ -279,6 +312,10 @@ $(document).ready(function () {
                     }
                     req.send(null);
                 }
+
+                /* call the progress-updater every 1000ms */
+
+                fetch(progress_uuid);
 
 
                 //

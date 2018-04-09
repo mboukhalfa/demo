@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.views.generic import RedirectView
 
 urlpatterns = [
+    url(r'^$', RedirectView.as_view(pattern_name='oauth:gettokens', permanent=True)),
     url('^accounts/', include('django.contrib.auth.urls')),
     url(r'^o/', include('oauth.urls', namespace='oauth')),
     url(r'^upload/', include('upload.urls', namespace='upload')),

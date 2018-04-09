@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'h676vb%9&9=5v8@2*8g)9+_hd+ww6^nsh&1*k%agro_8xbp4q!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'upload',
     'oauth',
     'corsheaders',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -77,6 +78,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'src.wsgi.application'
 #corsheaders conf
 CORS_ORIGIN_ALLOW_ALL = True
+ALLOWED_HOSTS = ['*']
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 

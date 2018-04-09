@@ -1,12 +1,59 @@
-here OAuth app exist
-<ul>
-<li> URL : {{ oauthAppObject.redirect_uri}} </li>
-<li> Id : {{ oauthAppObject.client_id}} </li>
-<li> Secret : {{ oauthAppObject.client_secret}} </li>
-{% if oauthAppObject.access_token %}
-<li> Access token : {{ oauthAppObject.access_token}} </li>
-<li> Refresh token : {{ oauthAppObject.refresh_token}} </li>
-{% endif %}
-</ul>
-<a href="{% url 'oauth:deleteOauthApp' %}"><button type="button">Delete</button></a>
-<a href="http://dcm-ovs.com/o/authorize/?client_id={{ oauthAppObject.client_id}}&response_type=code&state=random_state_string" > Authorize secure storage to access your account</a>
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container border">
+        <h3 class=" my-4 ml-2 font-weight-bold ">{{ application.name }}</h3>
+        <div class=" m-4">
+
+            <div class="form-group">
+                <label for="client_id" class="font-weight-bold lead">Client id</label>
+                <input class="form-control" id="client_id" type="text" value="{{ oauthAppObject.client_id }}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="client_secret" class="font-weight-bold lead">Client secret</label>
+                <input class="form-control" id="client_secret" type="text" value="{{ oauthAppObject.client_secret }}"
+                       readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="redirect_uris" class="font-weight-bold lead">Redirect Uri</label>
+                <input class="form-control" id="client_secret" type="text" value="{{ oauthAppObject.redirect_uri }}"
+                       readonly>
+            </div>
+
+
+
+
+            {% if oauthAppObject.access_token %}
+
+                <div class="form-group">
+                    <label for="redirect_uris" class="font-weight-bold lead">Access token</label>
+                    <input class="form-control" id="client_secret" type="text" value="{{ oauthAppObject.access_token }}"
+                           readonly>
+                </div>
+                <div class="form-group">
+                    <label for="redirect_uris" class="font-weight-bold lead">Refresh token</label>
+                    <input class="form-control" id="client_secret" type="text"
+                           value="{{ oauthAppObject.refresh_token }}"
+                           readonly>
+                </div>
+
+            {% endif %}
+
+            <div class="btn-toolbar">
+                <a class="btn btn-danger "
+                   href="{% url "oauth:deleteOauthApp" %}">Delete</a>
+
+                {% if not oauthAppObject.access_token %}
+                <a class="btn btn-success "
+                   href="http://dcm-ovs.com/o/authorize/?client_id={{ oauthAppObject.client_id }}&response_type=code&state=random_state_string">Authorize</a>
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
