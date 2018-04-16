@@ -23,5 +23,5 @@ urlpatterns = [
     url('^accounts/', include('django.contrib.auth.urls')),
     url(r'^o/', include('oauth.urls', namespace='oauth')),
     url(r'^upload/', include('upload.urls', namespace='upload')),
-    url(r'^admin/', admin.site.urls),
+    #url(r'^admin/', admin.site.urls),
 ]

@@ -177,7 +177,7 @@ $(document).ready(function () {
     function uploadFile(fileItem) {
         var data = {
             // add to setting url to simplify editing
-            url: 'http://ss.dcm-ovs.com/upload/',
+            url: "http://"+window.location.hostname+':8080/upload/',
         };
 
         $.ajax({
@@ -235,7 +235,7 @@ $(document).ready(function () {
 
                 function fetch(progress_uuid) {
                     let req = new XMLHttpRequest();
-                    req.open("GET", "http://ss.dcm-ovs.com/progress", true);
+                    req.open("GET", "http://"+window.location.hostname+":8080/progress", true);
                     req.setRequestHeader("X-Progress-ID", progress_uuid);
                     req.onreadystatechange = function () {
                         if (req.readyState == 4) {
@@ -290,8 +290,8 @@ $(document).ready(function () {
 
 
                                     switch (upload.status) {
-                                        case 200:
-                                            itemhtml.replaceWith('<div class="alert alert-success" role="alert">This video was successfully uploaded </div>')
+                                        case 403:
+                                            itemhtml.replaceWith('<div class="alert alert-danger" role="alert">Error, Permission denied  </div>')
                                             break;
                                         case 413:
                                             itemhtml.replaceWith('<div class="alert alert-danger" role="alert">Error, file too large ! </div>')

@@ -16,7 +16,7 @@ UUID_EXPIRE_SECONDS = settings.UUID_EXPIRE_SECONDS
 WEB_SERVER_URL_ROOT = settings.WEB_SERVER_URL_ROOT
 WEB_SERVER_URL_API_UPLOAD = settings.WEB_SERVER_URL_API_UPLOAD
 
-@login_required(login_url='/admin/')
+@login_required
 @staff_member_required
 def gettokens(request):
     if request.method == 'POST':
@@ -81,6 +81,7 @@ def gettokens(request):
 
                 context = {
                     'oauthAppObject': oauthAppObject,
+					'url': WEB_SERVER_URL_ROOT,
                 }
                 return render(request, "oauth/OauthApp.html", context)
 
