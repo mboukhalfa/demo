@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+let ss_url = "http://ss.dcm-ovs.com:8080"
     /***** drag and drop ********/
     let dropper = document.getElementById('deposer');
     dropper.addEventListener('dragover', function (e) {
@@ -177,7 +177,7 @@ $(document).ready(function () {
     function uploadFile(fileItem) {
         var data = {
             // add to setting url to simplify editing
-            url: "http://"+window.location.hostname+':8080/upload/',
+            url: ss_url+'/upload/',
         };
 
         $.ajax({
@@ -235,7 +235,7 @@ $(document).ready(function () {
 
                 function fetch(progress_uuid) {
                     let req = new XMLHttpRequest();
-                    req.open("GET", "http://"+window.location.hostname+":8080/progress", true);
+                    req.open("GET", ss_url+"/progress", true);
                     req.setRequestHeader("X-Progress-ID", progress_uuid);
                     req.onreadystatechange = function () {
                         if (req.readyState == 4) {
@@ -316,57 +316,6 @@ $(document).ready(function () {
                 /* call the progress-updater every 1000ms */
 
                 fetch(progress_uuid);
-
-
-                //
-                // // Monitor upload progress and attach to fileItem.
-                // xhr.upload.addEventListener("progress", function (event) {
-                //     if (event.lengthComputable) {
-                //         var progress = Math.round(event.loaded / event.total * 100);
-                //
-                //     }
-                // })
-                //
-                // function readBody(xhr) {
-                //     var data;
-                //     if (!xhr.responseType || xhr.responseType === "text") {
-                //         data = xhr.responseText;
-                //
-                //     } else if (xhr.responseType === "document") {
-                //         data = xhr.responseXML;
-                //
-                //     } else {
-                //         data = xhr.response;
-                //
-                //     }
-                //     return data;
-                // }
-                //
-                //
-                // xhr.onreadystatechange = function () {
-                //     if (xhr.readyState === 4) {
-                //         let item = arafile(fileItem);
-                //         let itemhtml = arafileHtml(item);
-                //
-                //         switch (xhr.status) {
-                //             case 200:
-                //                 itemhtml.replaceWith('<div class="alert alert-success" role="alert">This video was successfully uploaded </div>')
-                //                 break;
-                //             case 413:
-                //                 itemhtml.replaceWith('<div class="alert alert-danger" role="alert">Error, file too large ! </div>')
-                //                 break;
-                //             case 415:
-                //                 itemhtml.replaceWith('<div class="alert alert-danger" role="alert">Error, Unsupported Media Type !</div>')
-                //                 break;
-                //             default:
-                //                 itemhtml.replaceWith('<div class="alert alert-danger" role="alert">Error, file too large ! </div>')
-                //                 break;
-                //
-                //         }
-                //         console.log(readBody(xhr));
-                //     }
-                // }
-
 
             }
         )

@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -16,6 +16,9 @@ UUID_EXPIRE_SECONDS = settings.UUID_EXPIRE_SECONDS
 WEB_SERVER_URL_ROOT = settings.WEB_SERVER_URL_ROOT
 WEB_SERVER_URL_API_UPLOAD = settings.WEB_SERVER_URL_API_UPLOAD
 
+url = settings.SERVER_URL_ROOT
+
+
 @login_required
 @staff_member_required
 def gettokens(request):
@@ -32,6 +35,7 @@ def gettokens(request):
             oauthAppObject = form.save()
 
             context = {
+                'url': url,
                 'oauthAppObject': oauthAppObject,
             }
             return render(request, "oauth/OauthApp.html", context)
@@ -54,7 +58,7 @@ def gettokens(request):
                 # show app info and buttons for get tokens , edit app and delete
                 # form = OauthAppForm(instance=oauthAppObject)
                 context = {
-                    # "form":form,
+                    'url': url,
                     'oauthAppObject': oauthAppObject,
                 }
                 return render(request, "oauth/OauthApp.html", context)
@@ -81,7 +85,7 @@ def gettokens(request):
 
                 context = {
                     'oauthAppObject': oauthAppObject,
-					'url': WEB_SERVER_URL_ROOT,
+                    'url': url,
                 }
                 return render(request, "oauth/OauthApp.html", context)
 
@@ -120,4 +124,3 @@ def deleteOauthApp(request):
         }
 
         return render(request, "oauth/deleteOauthApp.html", context)
-

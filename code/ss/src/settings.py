@@ -138,7 +138,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
  SETTINGS
 	  '''
 UUID_EXPIRE_SECONDS = 300
+# in docker network
 WEB_SERVER_URL_ROOT = 'http://web_dcm_ovs:8000'
 WEB_SERVER_URL_API_UPLOAD = '/api/upload/'
-
+# client network browser
+SERVER_URL_ROOT = 'http://dcm-ovs.com'
 LOGIN_REDIRECT_URL = '/'
